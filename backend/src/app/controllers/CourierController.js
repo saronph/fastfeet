@@ -30,20 +30,12 @@ class CourierController {
       email,
     });
   }
-  /*
+
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
-      street: Yup.string(),
-      number: Yup.number(),
-      complement: Yup.string(),
-      state: Yup.string(),
-      city: Yup.string(),
-      zip_code: Yup.number().test(
-        'len',
-        'Must be exactly 8 numbers',
-        val => val.toString().length === 8
-      ),
+      email: Yup.string().email(),
+      avatar_id: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -51,42 +43,52 @@ class CourierController {
     }
 
     const { id } = req.params;
-    const { name } = req.body;
+    const { email } = req.body;
 
-    const recipient = await Recipient.findByPk(id);
+    const courier = await Courier.findByPk(id);
 
-    if (!recipient) {
-      return res.status(400).json({ error: 'Recipient does not exist' });
-    }
+    if (email !== courier.email) {
+      const courierExists = await Courier.findOne({ where: { email } });
 
-    if (name !== recipient.name) {
-      const nameExists = await Recipient.findOne({ where: { name } });
-
-      if (nameExists) {
-        return res.status(400).json({ error: 'This name is already in use' });
+      if (courierExists) {
+        return res.status(400).json({ error: 'Courier already exists.' });
       }
     }
 
-    const {
-      street,
-      number,
-      complement,
-      state,
-      city,
-      zip_code,
-    } = await recipient.update(req.body);
+    const { name, avatar } = await courier.update(req.body);
 
     return res.json({
       name,
-      street,
-      number,
-      complement,
-      state,
-      city,
-      zip_code,
+      email,
+      avatar,
     });
   }
-  */
+
+  async index(req, res) {
+    const couriers = await Courier.findAll({
+      attributes: ['id', 'name', 'email'],
+    });
+
+    return res.json(couriers);
+  }
+
+  async delete(req, res) {
+    const couriers = await Courier.findByPk(req.params.id);
+
+    const { id } = req.params;
+
+    if (!couriers) {
+      return res.status(400).json({ error: 'Courier does not exists' });
+    }
+
+    await couriers.destroy({
+      where: {
+        id,
+      },
+    });
+
+    return res.json(couriers);
+  }
 }
 
 export default new CourierController();
