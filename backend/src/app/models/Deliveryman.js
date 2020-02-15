@@ -1,6 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Courier extends Model {
+class Deliveryman extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -9,6 +9,8 @@ class Courier extends Model {
       },
       {
         sequelize,
+        freezeTableName: true,
+        tableName: 'deliveryman',
       }
     );
 
@@ -20,4 +22,4 @@ class Courier extends Model {
   }
 }
 
-export default Courier;
+export default Deliveryman;
