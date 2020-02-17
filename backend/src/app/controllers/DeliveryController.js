@@ -4,7 +4,8 @@ import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 
-import Mail from '../../lib/Mail';
+import DeliveryMail from '../jobs/DeliveryMail';
+import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async store(req, res) {
@@ -36,7 +37,24 @@ class DeliveryController {
       deliveryman_id,
     });
 
-    await Mail.sendMail({});
+    const deliveryComplete = await Delivery.findByPk(delivery.id, {
+      include: [
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Recipient,
+          as: 'recipient',
+        },
+      ],
+    });
+
+    await Queue.add(DeliveryMail.key, {
+      deliveryComplete,
+      delivery,
+    });
 
     return res.json({ delivery });
   }
@@ -77,9 +95,6 @@ class DeliveryController {
 
     if (!validDeliveryman)
       return res.status(401).json({ error: "Deliveryman doesn't exist!" });
-
-    // Horários disponíveis para retirada
-    // const range = setInterval[(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)];
 
     // Verificação retirada do produto
     const dateStart = startOfSecond(parseISO(start_date));
