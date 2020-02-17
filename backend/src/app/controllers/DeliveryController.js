@@ -1,8 +1,10 @@
-import { parseISO, isBefore, startOfHour } from 'date-fns';
+import { parseISO, isBefore, startOfSecond } from 'date-fns';
 import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
+
+import Mail from '../../lib/Mail';
 
 class DeliveryController {
   async store(req, res) {
@@ -33,6 +35,8 @@ class DeliveryController {
       recipient_id,
       deliveryman_id,
     });
+
+    await Mail.sendMail({});
 
     return res.json({ delivery });
   }
@@ -65,6 +69,7 @@ class DeliveryController {
 
     const validRecipient = await Recipient.findByPk(recipient_id);
 
+    // Verificações recipients e deliveryman
     if (!validRecipient)
       return res.status(401).json({ error: "This recipient doesn't exist!" });
 
@@ -73,22 +78,48 @@ class DeliveryController {
     if (!validDeliveryman)
       return res.status(401).json({ error: "Deliveryman doesn't exist!" });
 
-    const dateStart = startOfHour(parseISO(start_date));
+    // Horários disponíveis para retirada
+    // const range = setInterval[(8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)];
+
+    // Verificação retirada do produto
+    const dateStart = startOfSecond(parseISO(start_date));
 
     if (isBefore(dateStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
-    const dateEnd = startOfHour(parseISO(end_date));
+    const currentStart = dateStart.getHours();
+
+    if (currentStart < 8 || currentStart >= 18) {
+      return res
+        .status(400)
+        .json({ error: 'Withdrawals only available between 08:00 and 18:00' });
+    }
+
+    // Verificação entrega do produto
+    const dateEnd = startOfSecond(parseISO(end_date));
 
     if (isBefore(dateEnd, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
-    const dateCanceled = startOfHour(parseISO(canceled_at));
+    if (isBefore(dateEnd, dateStart)) {
+      return res
+        .status(400)
+        .json({ error: 'Only dates after the start date are accepted' });
+    }
+
+    // Verificação cancelamento da entrega
+    const dateCanceled = startOfSecond(parseISO(canceled_at));
 
     if (isBefore(dateCanceled, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
+    }
+
+    if (isBefore(dateCanceled, dateStart)) {
+      return res
+        .status(400)
+        .json({ error: 'Only dates after the start date are accepted' });
     }
 
     const delivery = await Delivery.findByPk(id);
