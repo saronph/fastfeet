@@ -5,6 +5,7 @@ class Delivery extends Model {
     super.init(
       {
         product: Sequelize.STRING,
+        deliveryman_id: Sequelize.INTEGER,
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
         signature_id: Sequelize.INTEGER,
