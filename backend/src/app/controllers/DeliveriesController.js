@@ -1,8 +1,13 @@
 import { Op } from 'sequelize';
-import { parseISO, isBefore, startOfSecond, subDays } from 'date-fns';
+import {
+  parseISO,
+  isBefore,
+  startOfSecond,
+  startOfDay,
+  endOfDay,
+} from 'date-fns';
 import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
-import Deliveryman from '../models/Deliveryman';
 
 class DeliveriesController {
   async index(req, res) {
@@ -43,11 +48,11 @@ class DeliveriesController {
 
     const { id } = req.params;
 
-    const { deliveryman_id, start_date, end_date, signature_id } = req.body;
+    const { delivery_id, start_date, end_date, signature_id } = req.body;
 
-    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+    const deliveryExist = await Delivery.findByPk(delivery_id);
 
-    if (!deliveryman) return res.status(401).json({ error: 'Id invalid.' });
+    if (!deliveryExist) return res.status(401).json({ error: 'Id invalid.' });
 
     // Verificações retirada do produto
     const dateStart = startOfSecond(parseISO(start_date));
@@ -67,8 +72,8 @@ class DeliveriesController {
     const checkLimit = await Delivery.findAll({
       where: {
         deliveryman_id: id,
-        created_at: {
-          [Op.between]: [subDays(new Date(), 1), new Date()],
+        start_date: {
+          [Op.between]: [startOfDay(new Date()), endOfDay(new Date())],
         },
       },
     });
