@@ -1,20 +1,6 @@
 version: '3'
 
 services:
-  fastfeet-api:
-    build: .
-    container_name: fastfeet-api
-    volumes:
-      - .:/home/node/api
-      - /home/node/api/node_modules
-    environment:
-      - APP_SECRET=${APP_SECRET}
-    ports:
-      - '3333:3333'
-    command: yarn start
-    depends_on:
-      - fast-database
-      - redisfastfeet
 
   fast-database:
     image: postgres:11
@@ -33,7 +19,10 @@ services:
   redisfastfeet:
     image: redis:alpine
     container_name: redisfastfeet
+    ports:
+      - '6379:6379'
     environment:
+      - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
 
