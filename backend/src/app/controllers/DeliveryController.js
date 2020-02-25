@@ -1,5 +1,6 @@
 import { parseISO, isBefore, startOfSecond } from 'date-fns';
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
@@ -154,17 +155,30 @@ class DeliveryController {
   }
 
   async index(req, res) {
-    const deliveries = await Delivery.findAll({
-      attributes: [
-        'id',
-        'product',
-        'recipient_id',
-        'deliveryman_id',
-        'signature_id',
-      ],
+    const product = req.query.product || '';
+    const page = parseInt(req.query.page || 1, 10);
+    const perPage = parseInt(req.query.perPage || 5, 10);
+
+    const products = await Delivery.findAndCountAll({
+      order: ['product'],
+      where: {
+        product: {
+          [Op.iLike]: `%${product}%`,
+        },
+      },
+      limit: perPage,
+      offset: (page - 1) * perPage,
     });
 
-    return res.json(deliveries);
+    const totalPage = Math.ceil(products.count / perPage);
+
+    return res.json({
+      page,
+      perPage,
+      data: products.rows,
+      total: products.count,
+      totalPage,
+    });
   }
 
   async delete(req, res) {

@@ -34,6 +34,7 @@ routes.put('/problems/:id/cancel-delivery', DeliveryProblemController.update);
 
 routes.put('/recipients/:id', RecipientController.update);
 routes.post('/recipients', RecipientController.store);
+routes.get('/recipients', RecipientController.index);
 
 routes.post('/deliveryman', DeliverymanController.store);
 routes.put('/deliveryman/:id', DeliverymanController.update);

@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Recipient from '../models/Recipient';
 
 class RecipientController {
@@ -107,6 +108,33 @@ class RecipientController {
       state,
       city,
       zip_code,
+    });
+  }
+
+  async index(req, res) {
+    const name = req.query.name || '';
+    const page = parseInt(req.query.page || 1, 10);
+    const perPage = parseInt(req.query.perPage || 5, 10);
+
+    const recipients = await Recipient.findAndCountAll({
+      order: ['name'],
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      limit: perPage,
+      offset: (page - 1) * perPage,
+    });
+
+    const totalPage = Math.ceil(recipients.count / perPage);
+
+    return res.json({
+      page,
+      perPage,
+      data: recipients.rows,
+      total: recipients.count,
+      totalPage,
     });
   }
 }

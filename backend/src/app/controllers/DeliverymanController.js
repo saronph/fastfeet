@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
+
 import Deliveryman from '../models/Deliveryman';
 
 class DeliverymanController {
@@ -65,11 +67,30 @@ class DeliverymanController {
   }
 
   async index(req, res) {
-    const deliveryman = await Deliveryman.findAll({
-      attributes: ['id', 'name', 'email'],
+    const name = req.query.name || '';
+    const page = parseInt(req.query.page || 1, 10);
+    const perPage = parseInt(req.query.perPage || 5, 10);
+
+    const deliveryman = await Deliveryman.findAndCountAll({
+      order: ['name'],
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      limit: perPage,
+      offset: (page - 1) * perPage,
     });
 
-    return res.json(deliveryman);
+    const totalPage = Math.ceil(deliveryman.count / perPage);
+
+    return res.json({
+      page,
+      perPage,
+      data: deliveryman.rows,
+      total: deliveryman.count,
+      totalPage,
+    });
   }
 
   async delete(req, res) {
