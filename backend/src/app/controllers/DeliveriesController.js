@@ -8,6 +8,7 @@ import {
 } from 'date-fns';
 import * as Yup from 'yup';
 import Delivery from '../models/Delivery';
+import File from '../models/File';
 
 class DeliveriesController {
   async index(req, res) {
@@ -104,13 +105,23 @@ class DeliveriesController {
 
     const delivery = await Delivery.findByPk(id);
 
-    const setDelivery = await delivery.update({
+    await delivery.update({
       signature_id,
       start_date: dateStart,
       end_date: dateEnd,
     });
 
-    return res.json(setDelivery);
+    const { signature } = await Delivery.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
+
+    return res.json({ signature_id, start_date, end_date, signature });
   }
 }
 

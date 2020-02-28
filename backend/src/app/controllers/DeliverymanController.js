@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import { Op } from 'sequelize';
 
 import Deliveryman from '../models/Deliveryman';
+import File from '../models/File';
 
 class DeliverymanController {
   async store(req, res) {
@@ -57,7 +58,17 @@ class DeliverymanController {
       }
     }
 
-    const { name, avatar } = await deliveryman.update(req.body);
+    await deliveryman.update(req.body);
+
+    const { name, avatar } = await Deliveryman.findByPk(id, {
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'path', 'url'],
+        },
+      ],
+    });
 
     return res.json({
       name,
