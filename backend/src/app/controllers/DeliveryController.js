@@ -2,6 +2,7 @@ import { parseISO, isBefore, startOfSecond } from 'date-fns';
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Delivery from '../models/Delivery';
+import File from '../models/File';
 import Recipient from '../models/Recipient';
 import Deliveryman from '../models/Deliveryman';
 
@@ -156,29 +157,43 @@ class DeliveryController {
 
   async index(req, res) {
     const product = req.query.product || '';
-    const page = parseInt(req.query.page || 1, 10);
-    const perPage = parseInt(req.query.perPage || 5, 10);
+    const { page = 1 } = req.query;
 
-    const products = await Delivery.findAndCountAll({
+    const deliveries = await Delivery.findAll({
       order: ['product'],
+      limit: 20,
       where: {
-        product: {
-          [Op.iLike]: `%${product}%`,
-        },
+        product: { [Op.iLike]: `%${product}%` },
       },
-      limit: perPage,
-      offset: (page - 1) * perPage,
+      offset: (page - 1) * 20,
+      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['id', 'name', 'street', 'state', 'city'],
+        },
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['id', 'name', 'email'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'name', 'path', 'url'],
+            },
+          ],
+        },
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['id', 'name', 'path', 'url'],
+        },
+      ],
     });
 
-    const totalPage = Math.ceil(products.count / perPage);
-
-    return res.json({
-      page,
-      perPage,
-      data: products.rows,
-      total: products.count,
-      totalPage,
-    });
+    return res.json(deliveries);
   }
 
   async delete(req, res) {
