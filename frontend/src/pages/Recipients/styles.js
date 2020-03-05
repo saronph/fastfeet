@@ -64,31 +64,15 @@ export const Content = styled.div`
       font-weight: bold;
       color: #444444;
 
-      th.recipient {
+      th.name {
         width: 250px;
-        display: flex;
-        margin-left: 20px;
+        padding-left: 50px;
         text-align: left;
       }
 
-      th.deliveryman {
+      th.address {
         width: 280px;
-        margin-left: 20px;
-        text-align: left;
-      }
-
-      th.city {
-        width: 170px;
-        text-align: left;
-      }
-
-      th.state {
-        width: 170px;
-        text-align: left;
-      }
-
-      th.status {
-        width: 120px;
+        padding-left: 50px;
         text-align: left;
       }
 
@@ -114,48 +98,20 @@ export const Content = styled.div`
         text-align: center;
       }
 
-      td.recipient {
-        width: 250px;
-        padding-left: 20px;
+      td.name {
+        width: 400px;
         text-align: left;
+        padding-left: 50px;
       }
 
-      td.deliveryman {
-        width: 280px;
-        margin-left: 20px;
-        text-align: left;
-
-        div {
-          background: rgba(255, 255, 255, 0.5);
-          vertical-align: middle;
-          margin-right: 5px;
-          max-width: 35px;
-          max-height: 35px;
-          border-radius: 50%;
-
-          span {
-            font-size: 16px;
-            vertical-align: middle;
-          }
-        }
-      }
-
-      td.city {
-        width: 170px;
-        text-align: left;
-      }
-
-      td.state {
-        width: 170px;
-        text-align: left;
-      }
-
-      td.status {
-        width: 120px;
+      td.address {
+        width: 420px;
+        padding-left: 50px;
         text-align: left;
       }
 
       td.actions {
+        width: 330px;
         text-align: right;
 
         svg {

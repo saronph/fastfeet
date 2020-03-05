@@ -67,7 +67,7 @@ export const Content = styled.div`
       th.recipient {
         width: 250px;
         display: flex;
-        margin-left: 20px;
+        margin-left: 50px;
         text-align: left;
       }
 
@@ -114,21 +114,13 @@ export const Content = styled.div`
         text-align: center;
       }
 
-      td.recipient {
-        width: 250px;
-        padding-left: 20px;
-        text-align: left;
-      }
-
-      td.deliveryman {
+      td.avatar {
         width: 280px;
-        margin-left: 20px;
-        text-align: left;
+        padding-left: 50px;
 
         div {
+          display: flex;
           background: rgba(255, 255, 255, 0.5);
-          vertical-align: middle;
-          margin-right: 5px;
           max-width: 35px;
           max-height: 35px;
           border-radius: 50%;
@@ -140,18 +132,13 @@ export const Content = styled.div`
         }
       }
 
-      td.city {
-        width: 170px;
+      td.name {
+        width: 350px;
         text-align: left;
       }
 
-      td.state {
-        width: 170px;
-        text-align: left;
-      }
-
-      td.status {
-        width: 120px;
+      td.email {
+        width: 330px;
         text-align: left;
       }
 
