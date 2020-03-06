@@ -61,3 +61,30 @@ export function ActionsMinor() {
     </Container>
   );
 }
+
+export function ActionsProblems() {
+  const [visible, setVisible] = useState(false);
+
+  function handleToggleVisible() {
+    setVisible(!visible);
+  }
+
+  return (
+    <Container>
+      <Badge onClick={handleToggleVisible}>
+        <FaEllipsisH color="#666666" size={20} />
+      </Badge>
+
+      <ActionList visible={visible}>
+        <ActionView>
+          <FaEye color="#8E5BE8" size={14} />
+          <button type="button">View</button>
+        </ActionView>
+        <ActionView>
+          <FaTrashAlt color="#DE3B3B" size={14} />
+          <button type="button">Cancel delivery</button>
+        </ActionView>
+      </ActionList>
+    </Container>
+  );
+}

@@ -7,20 +7,20 @@ import { ActionsMinor } from '~/components/Actions';
 
 import { Container, Content } from './styles';
 
-export default function Dashboard() {
-  const [deliveries, setDeliveries] = useState([]);
-  const [product, setProduct] = useState('');
+export default function Recipients() {
+  const [recipients, setRecipients] = useState([]);
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    async function loadDeliveries() {
-      const response = await api.get('deliveries');
+    async function loadRecipients() {
+      const response = await api.get('recipients');
 
       const { data } = response;
 
-      setDeliveries(data);
+      setRecipients(data);
     }
-    loadDeliveries();
-  }, [product]);
+    loadRecipients();
+  }, [name]);
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function Dashboard() {
           <input
             type="search"
             placeholder="Search for recipients..."
-            onChange={e => setProduct(e.target.value)}
+            onChange={e => setName(e.target.value)}
           />
           <button type="button">
             <div>
@@ -54,12 +54,15 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {deliveries.map(delivery => (
-              <tr key={delivery.id}>
-                <td className="id">{`#${delivery.deliveryman.id}`}</td>
+            {recipients.map(recipient => (
+              <tr key={recipient.id}>
+                <td className="id">{`#${recipient.id}`}</td>
 
-                <td className="name">{delivery.deliveryman.name}</td>
-                <td className="address">{delivery.deliveryman.email}</td>
+                <td className="name">{recipient.name}</td>
+                <td className="address">
+                  {recipient.street}, {recipient.number}, {recipient.city} -{' '}
+                  {recipient.state}
+                </td>
                 <td className="actions">
                   <ActionsMinor />
                 </td>

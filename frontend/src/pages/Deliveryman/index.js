@@ -8,20 +8,21 @@ import { ActionsMinor } from '~/components/Actions';
 
 import { Container, Content } from './styles';
 
-export default function Dashboard() {
-  const [deliveries, setDeliveries] = useState([]);
-  const [product, setProduct] = useState('');
+export default function Deliveryman() {
+  const [deliveryman, setDeliveryman] = useState([]);
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    async function loadDeliveries() {
-      const response = await api.get('deliveries');
+    async function loadDeliveryman() {
+      const response = await api.get('deliveryman');
 
       const { data } = response;
 
-      setDeliveries(data);
+      setDeliveryman(data);
     }
-    loadDeliveries();
-  }, [product]);
+    loadDeliveryman();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name]);
 
   return (
     <>
@@ -33,7 +34,7 @@ export default function Dashboard() {
           <input
             type="search"
             placeholder="Search for deliveryman..."
-            onChange={e => setProduct(e.target.value)}
+            onChange={e => setName(e.target.value)}
           />
           <button type="button">
             <div>
@@ -56,14 +57,14 @@ export default function Dashboard() {
             </tr>
           </thead>
           <tbody>
-            {deliveries.map(delivery => (
-              <tr key={delivery.id}>
-                <td className="id">{`#${delivery.deliveryman.id}`}</td>
+            {deliveryman.map(deliverymanData => (
+              <tr key={deliverymanData.id}>
+                <td className="id">{`#${deliverymanData.id}`}</td>
                 <td className="avatar">
-                  <Avatar name={delivery.deliveryman.name} maxInitials={2} />
+                  <Avatar name={deliverymanData.name} maxInitials={2} />
                 </td>
-                <td className="name">{delivery.deliveryman.name}</td>
-                <td className="email">{delivery.deliveryman.email}</td>
+                <td className="name">{deliverymanData.name}</td>
+                <td className="email">{deliverymanData.email}</td>
                 <td className="actions">
                   <ActionsMinor />
                 </td>

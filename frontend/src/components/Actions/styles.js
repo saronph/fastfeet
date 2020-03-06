@@ -35,6 +35,7 @@ export const ActionList = styled.div`
 `;
 
 export const ActionView = styled.div`
+  max-width: 150px;
   display: flex;
   height: 30px;
   align-items: center;
@@ -48,15 +49,16 @@ export const ActionView = styled.div`
   svg {
     align-items: left;
     justify-content: left;
-    margin-left: 15px;
   }
 
   button {
-    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
     color: #666666;
     border: 0;
     background: none;
     margin-top: 2px;
-    margin-left: 5px;
   }
 `;
