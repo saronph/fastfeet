@@ -3,6 +3,7 @@ import { MdAdd } from 'react-icons/md';
 import Avatar from 'react-avatar';
 
 import api from '~/services/api';
+import history from '~/services/history';
 
 import { ActionsMinor } from '~/components/Actions';
 
@@ -36,11 +37,13 @@ export default function Deliveryman() {
             placeholder="Search for deliveryman..."
             onChange={e => setName(e.target.value)}
           />
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => history.push('/deliverymanRegister')}
+          >
             <div>
               <MdAdd size={25} color="#fff" />
             </div>
-
             <span>Register</span>
           </button>
         </div>

@@ -161,11 +161,11 @@ class DeliveryController {
 
     const deliveries = await Delivery.findAll({
       order: ['product'],
-      limit: 20,
+      limit: 5,
       where: {
         product: { [Op.iLike]: `%${product}%` },
       },
-      offset: (page - 1) * 20,
+      offset: (page - 1) * 5,
       attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
       include: [
         {

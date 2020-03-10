@@ -49,6 +49,13 @@ export const Content = styled.div`
   aside {
     display: flex;
     align-items: center;
+
+    button {
+      background: none;
+      margin-top: 3px;
+      border: 0;
+      color: #de3b3b;
+    }
   }
 `;
 

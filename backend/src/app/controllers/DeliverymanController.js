@@ -79,29 +79,28 @@ class DeliverymanController {
 
   async index(req, res) {
     const name = req.query.name || '';
-    const page = parseInt(req.query.page || 1, 10);
-    const perPage = parseInt(req.query.perPage || 5, 10);
+    const { page = 1 } = req.query;
 
-    const deliveryman = await Deliveryman.findAndCountAll({
+    const deliveryman = await Deliveryman.findAll({
       order: ['name'],
       where: {
         name: {
           [Op.iLike]: `%${name}%`,
         },
       },
-      limit: perPage,
-      offset: (page - 1) * perPage,
+      limit: 5,
+      offset: (page - 1) * 5,
+      attributes: ['id', 'name', 'avatar_id', 'email'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'url', 'path'],
+        },
+      ],
     });
 
-    const totalPage = Math.ceil(deliveryman.count / perPage);
-
-    return res.json({
-      page,
-      perPage,
-      data: deliveryman.rows,
-      total: deliveryman.count,
-      totalPage,
-    });
+    return res.json(deliveryman);
   }
 
   async delete(req, res) {

@@ -113,29 +113,20 @@ class RecipientController {
 
   async index(req, res) {
     const name = req.query.name || '';
-    const page = parseInt(req.query.page || 1, 10);
-    const perPage = parseInt(req.query.perPage || 5, 10);
+    const { page = 1 } = req.query;
 
-    const recipients = await Recipient.findAndCountAll({
+    const recipients = await Recipient.findAll({
       order: ['name'],
       where: {
         name: {
           [Op.iLike]: `%${name}%`,
         },
       },
-      limit: perPage,
-      offset: (page - 1) * perPage,
+      limit: 5,
+      offset: (page - 1) * 5,
     });
 
-    const totalPage = Math.ceil(recipients.count / perPage);
-
-    return res.json({
-      page,
-      perPage,
-      data: recipients.rows,
-      total: recipients.count,
-      totalPage,
-    });
+    return res.json(recipients);
   }
 }
 

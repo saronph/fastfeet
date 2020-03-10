@@ -138,6 +138,15 @@ export const Content = styled.div`
             vertical-align: middle;
           }
         }
+
+        img {
+          background: rgba(255, 255, 255, 0.5);
+          vertical-align: middle;
+          margin-right: 5px;
+          max-width: 35px;
+          max-height: 35px;
+          border-radius: 50%;
+        }
       }
 
       td.city {

@@ -69,7 +69,11 @@ export default function Dashboard() {
                 <td className="id">{`#${delivery.id}`}</td>
                 <td className="recipient">{delivery.recipient.name}</td>
                 <td className="deliveryman">
-                  <Avatar name={delivery.deliveryman.name} maxInitials={2} />
+                  {delivery.deliveryman.avatar ? (
+                    <img src={`${delivery.deliveryman.avatar.url}`} alt="" />
+                  ) : (
+                    <Avatar name={delivery.deliveryman.name} maxInitials={2} />
+                  )}
 
                   {delivery.deliveryman.name}
                 </td>

@@ -11,7 +11,7 @@ import Queue from '../../lib/Queue';
 class DeliveryProblemController {
   async index(req, res) {
     const listProblems = await DeliveryProblem.findAll({
-      attributes: ['delivery_id', 'description', 'created_at'],
+      attributes: ['id', 'delivery_id', 'description', 'created_at'],
     });
 
     return res.json(listProblems);
