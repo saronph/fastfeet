@@ -91,7 +91,6 @@ export const Content = styled.div`
       height: 150px;
       width: 150px;
       border-radius: 50%;
-      border: 2px dashed #dddddd;
       cursor: pointer;
 
       &:hover {

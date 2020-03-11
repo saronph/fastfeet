@@ -1,13 +1,27 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useField } from '@rocketseat/unform';
+import { MdImage } from 'react-icons/md';
 import api from '~/services/api';
 
 import { Container } from './styles';
 
 export default function AvatarInput() {
-  const [file, setFile] = useState(null);
+  const { defaultValue, registerField } = useField('avatar');
+
+  const [preview, setPreview] = useState(defaultValue && defaultValue.url);
+  const [file, setFile] = useState(defaultValue && defaultValue.id);
 
   const ref = useRef();
+
+  useEffect(() => {
+    if (ref.current) {
+      registerField({
+        name: 'avatar_id',
+        ref: ref.current,
+        path: 'dataset.file',
+      });
+    }
+  }, [ref, registerField]);
 
   async function handleChange(e) {
     const data = new FormData();
@@ -19,15 +33,14 @@ export default function AvatarInput() {
     const { id, url } = response.data;
 
     setFile(id);
+    setPreview(url);
   }
 
   return (
     <Container>
       <label htmlFor="avatar">
-        <img
-          src="https://api.adorable.io/avatars/200/abott@adorable.png"
-          alt=""
-        />
+        <img src={preview || <MdImage size={55} />} alt="" />
+
         <input
           type="file"
           id="avatar"

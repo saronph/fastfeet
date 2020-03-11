@@ -10,7 +10,9 @@ import Deliveryman from '../pages/Deliveryman/index';
 import DeliverymanRegister from '../pages/Deliveryman/Register/index';
 
 import Problem from '../pages/Problem/index';
+
 import Recipients from '../pages/Recipients/index';
+import RecipientsForm from '../pages/Recipients/Form';
 
 export default function Routes() {
   return (
@@ -18,6 +20,7 @@ export default function Routes() {
       <Route path="/" exact component={SignIn} />
 
       <Route path="/dashboard" component={Dashboard} isPrivate />
+
       <Route path="/deliveryman" component={Deliveryman} isPrivate />
       <Route
         path="/deliverymanRegister"
@@ -25,7 +28,9 @@ export default function Routes() {
         isPrivate
       />
       <Route path="/problem" component={Problem} isPrivate />
+
       <Route path="/recipients" component={Recipients} isPrivate />
+      <Route path="/recipientsForm" component={RecipientsForm} isPrivate />
     </Switch>
   );
 }

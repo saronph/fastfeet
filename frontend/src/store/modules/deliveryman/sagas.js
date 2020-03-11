@@ -8,11 +8,12 @@ import { signFailure } from '~/store/modules/auth/actions';
 
 export function* registerDeliveryman({ payload }) {
   try {
-    const { name, email } = payload;
+    const { name, email, avatar_id } = payload;
 
     yield call(api.post, 'deliveryman', {
       name,
       email,
+      avatar_id,
     });
 
     toast.success('Registration completed.');

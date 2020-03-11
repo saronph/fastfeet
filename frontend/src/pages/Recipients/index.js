@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
 
 import api from '~/services/api';
+import history from '~/services/history';
 
 import { ActionsMinor } from '~/components/Actions';
 
@@ -34,7 +35,7 @@ export default function Recipients() {
             placeholder="Search for recipients..."
             onChange={e => setName(e.target.value)}
           />
-          <button type="button">
+          <button type="button" onClick={() => history.push('/recipientsForm')}>
             <div>
               <MdAdd size={25} color="#fff" />
             </div>

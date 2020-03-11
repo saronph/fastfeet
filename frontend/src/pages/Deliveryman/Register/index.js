@@ -1,8 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Input } from '@rocketseat/unform';
 import * as Yup from 'yup';
-import { MdAdd, MdKeyboardArrowLeft, MdImage } from 'react-icons/md';
+import { MdAdd, MdKeyboardArrowLeft } from 'react-icons/md';
+
+import history from '~/services/history';
 
 import { Container, Content } from './styles';
 import AvatarInput from './AvatarInput/index';
@@ -17,16 +19,10 @@ const schema = Yup.object().shape({
 });
 
 export default function DeliverymanRegister() {
-  const [file, setFile] = useState(null);
-
   const dispatch = useDispatch();
 
-  const preview = useMemo(() => {
-    return file ? URL.createObjectURL(file) : null;
-  }, [file]);
-
-  function handleSubmit({ name, email }) {
-    dispatch(registerRequest(name, email));
+  function handleSubmit({ name, email, avatar_id }) {
+    dispatch(registerRequest(name, email, avatar_id));
   }
 
   return (
@@ -36,7 +32,11 @@ export default function DeliverymanRegister() {
           <p>Deliveryman registration</p>
 
           <div>
-            <button className="return" type="button">
+            <button
+              className="return"
+              type="button"
+              onClick={() => history.push('/deliveryman')}
+            >
               <div>
                 <MdKeyboardArrowLeft size={25} color="#fff" />
               </div>
@@ -57,18 +57,7 @@ export default function DeliverymanRegister() {
         <div />
 
         <Form schema={schema} id="form" onSubmit={handleSubmit}>
-          <label
-            id="file"
-            style={{ backgroundImage: `url(${preview})` }}
-            className={file ? 'has-file' : ''}
-          >
-            <input
-              type="file"
-              onChange={event => setFile(event.target.files[0])}
-            />
-            <MdImage size={55} />
-            <p className="photo">Add photo</p>
-          </label>
+          <AvatarInput name="avatar_id" />
           <p>Name</p>
           <Input name="name" type="name" placeholder="Ex: John Doe" />
           <p>Email</p>
