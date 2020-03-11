@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
-
-import { ActionsMinor } from '~/components/Actions';
 
 import { Container, Content } from './styles';
 
@@ -22,6 +21,17 @@ export default function Recipients() {
     }
     loadRecipients();
   }, [name]);
+
+  async function handleDelete(id) {
+    const confirm = window.confirm('Are you sure you want to delete?');
+
+    if (!confirm) {
+      toast.error('Recipient not deleted');
+    } else {
+      await api.delete(`/recipients/${id}`);
+      window.location.reload();
+    }
+  }
 
   return (
     <>
@@ -65,7 +75,22 @@ export default function Recipients() {
                   {recipient.state}
                 </td>
                 <td className="actions">
-                  <ActionsMinor />
+                  <button
+                    type="submit"
+                    className="edit"
+                    onClick={() =>
+                      history.push(`/recipientsFormEdit/${recipient.id}`)
+                    }
+                  >
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="delete"
+                    onClick={() => handleDelete(recipient.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

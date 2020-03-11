@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { FaEllipsisH, FaEye, FaPen, FaTrashAlt } from 'react-icons/fa';
 
-import { Container, Badge, ActionList, ActionView } from './styles';
+import { Actions, Badge, ActionList, ActionView } from './styles';
 
-export default function Actions() {
+export default function ActionsMenu() {
   const [visible, setVisible] = useState(false);
 
   function handleToggleVisible() {
@@ -12,7 +12,7 @@ export default function Actions() {
   }
 
   return (
-    <Container>
+    <Actions>
       <Badge onClick={handleToggleVisible}>
         <FaEllipsisH color="#666666" size={20} />
       </Badge>
@@ -31,7 +31,7 @@ export default function Actions() {
           <button type="button">Delete</button>
         </ActionView>
       </ActionList>
-    </Container>
+    </Actions>
   );
 }
 
@@ -43,7 +43,7 @@ export function ActionsMinor() {
   }
 
   return (
-    <Container>
+    <Actions>
       <Badge onClick={handleToggleVisible}>
         <FaEllipsisH color="#666666" size={20} />
       </Badge>
@@ -58,7 +58,7 @@ export function ActionsMinor() {
           <button type="button">Delete</button>
         </ActionView>
       </ActionList>
-    </Container>
+    </Actions>
   );
 }
 
@@ -70,7 +70,7 @@ export function ActionsProblems() {
   }
 
   return (
-    <Container>
+    <Actions>
       <Badge onClick={handleToggleVisible}>
         <FaEllipsisH color="#666666" size={20} />
       </Badge>
@@ -85,6 +85,6 @@ export function ActionsProblems() {
           <button type="button">Cancel delivery</button>
         </ActionView>
       </ActionList>
-    </Container>
+    </Actions>
   );
 }

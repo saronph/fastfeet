@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
 import Avatar from 'react-avatar';
 
+import { toast } from 'react-toastify';
 import api from '~/services/api';
 import history from '~/services/history';
-
-import { ActionsMinor } from '~/components/Actions';
 
 import { Container, Content } from './styles';
 
@@ -24,6 +23,17 @@ export default function Deliveryman() {
     loadDeliveryman();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
+
+  async function handleDelete(id) {
+    const confirm = window.confirm('Are you sure you want to delete?');
+
+    if (!confirm) {
+      toast.error('Deliveryman not deleted');
+    } else {
+      await api.delete(`/deliveryman/${id}`);
+      window.location.reload();
+    }
+  }
 
   return (
     <>
@@ -69,7 +79,16 @@ export default function Deliveryman() {
                 <td className="name">{deliverymanData.name}</td>
                 <td className="email">{deliverymanData.email}</td>
                 <td className="actions">
-                  <ActionsMinor />
+                  <button type="submit" className="edit">
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="delete"
+                    onClick={() => handleDelete(deliverymanData.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

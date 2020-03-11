@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MdAdd } from 'react-icons/md';
 import Avatar from 'react-avatar';
+import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 
-import Actions from '~/components/Actions';
 import {
   Delivered,
   Pending,
@@ -28,6 +28,18 @@ export default function Dashboard() {
     }
     loadDeliveries();
   }, [product]);
+
+  async function handleDelete(id) {
+    const confirm = window.confirm('Are you sure you want to delete?');
+
+    if (!confirm) {
+      toast.error('Delivery not deleted');
+    } else {
+      await api.delete(`/deliveries/${id}`);
+      toast.success('Delivery successfully deleted');
+      window.location.reload();
+    }
+  }
 
   return (
     <>
@@ -83,7 +95,19 @@ export default function Dashboard() {
                   <Canceled />
                 </td>
                 <td className="actions">
-                  <Actions />
+                  <button type="submit" className="view">
+                    View
+                  </button>
+                  <button type="submit" className="edit">
+                    Edit
+                  </button>
+                  <button
+                    type="button"
+                    className="delete"
+                    onClick={() => handleDelete(delivery.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

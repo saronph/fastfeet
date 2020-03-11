@@ -13,6 +13,7 @@ import Problem from '../pages/Problem/index';
 
 import Recipients from '../pages/Recipients/index';
 import RecipientsForm from '../pages/Recipients/Form';
+import RecipientsFormEdit from '../pages/Recipients/Edit';
 
 export default function Routes() {
   return (
@@ -31,6 +32,11 @@ export default function Routes() {
 
       <Route path="/recipients" component={Recipients} isPrivate />
       <Route path="/recipientsForm" component={RecipientsForm} isPrivate />
+      <Route
+        path="/recipientsFormEdit/:id"
+        component={RecipientsFormEdit}
+        isPrivate
+      />
     </Switch>
   );
 }

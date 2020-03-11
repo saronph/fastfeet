@@ -165,10 +165,31 @@ export const Content = styled.div`
       }
 
       td.actions {
+        display: column;
         text-align: right;
 
-        svg {
-          margin-right: 10px;
+        button {
+          font-size: 16px;
+          color: #8e5be8;
+          background: none;
+          border: 0;
+          margin: 0 3px;
+
+          &:hover {
+            background: ${darken(0.1, '#f5f5f5')};
+          }
+        }
+
+        button.delete {
+          font-size: 16px;
+          color: #de3b3b;
+          background: none;
+          border: 0;
+          margin: 0 3px;
+
+          &:hover {
+            background: ${darken(0.1, '#f5f5f5')};
+          }
         }
       }
     }
