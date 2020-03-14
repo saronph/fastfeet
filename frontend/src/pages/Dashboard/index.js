@@ -3,6 +3,8 @@ import { MdAdd } from 'react-icons/md';
 import Avatar from 'react-avatar';
 import { toast } from 'react-toastify';
 
+import history from '~/services/history';
+
 import api from '~/services/api';
 
 import {
@@ -27,7 +29,7 @@ export default function Dashboard() {
       setDeliveries(data);
     }
     loadDeliveries();
-  }, [product]);
+  }, []);
 
   async function handleDelete(id) {
     const confirm = window.confirm('Are you sure you want to delete?');
@@ -53,7 +55,10 @@ export default function Dashboard() {
             placeholder="Search for deliveries..."
             onChange={e => setProduct(e.target.value)}
           />
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => history.push('/deliveryRegister')}
+          >
             <div>
               <MdAdd size={25} color="#fff" />
             </div>

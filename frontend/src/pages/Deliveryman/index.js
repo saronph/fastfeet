@@ -79,7 +79,13 @@ export default function Deliveryman() {
                 <td className="name">{deliverymanData.name}</td>
                 <td className="email">{deliverymanData.email}</td>
                 <td className="actions">
-                  <button type="submit" className="edit">
+                  <button
+                    type="submit"
+                    className="edit"
+                    onClick={() =>
+                      history.push(`/deliverymanFormEdit/${deliverymanData.id}`)
+                    }
+                  >
                     Edit
                   </button>
                   <button

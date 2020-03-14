@@ -103,6 +103,23 @@ class DeliverymanController {
     return res.json(deliveryman);
   }
 
+  async get(req, res) {
+    const { id } = req.params;
+
+    const validDeliveryman = await Deliveryman.findByPk(id);
+
+    if (!validDeliveryman)
+      return res.status(401).json({ error: "This Deliveryman doesn't exist!" });
+
+    const deliveryman = await Deliveryman.findOne({
+      where: {
+        id,
+      },
+    });
+
+    return res.json([deliveryman]);
+  }
+
   async delete(req, res) {
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 

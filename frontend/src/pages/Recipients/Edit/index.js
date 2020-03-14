@@ -1,14 +1,14 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import { Form, Input } from '@rocketseat/unform';
+import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { MdAdd, MdKeyboardArrowLeft } from 'react-icons/md';
+import { toast } from 'react-toastify';
 
 import history from '~/services/history';
+import api from '~/services/api';
 
 import { Container, Content } from './styles';
-
-import { recipientRegister } from '~/store/modules/recipients/actions';
 
 const schema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -25,21 +25,33 @@ const schema = Yup.object().shape({
   ),
 });
 
-export default function RecipientsForm() {
-  const dispatch = useDispatch();
+export default function RecipientsFormEdit({ match }) {
+  const { id } = match.params;
+  const [recipients, setRecipients] = useState([]);
 
-  function handleSubmit({
-    name,
-    street,
-    number,
-    complement,
-    city,
-    state,
-    zip_code,
-  }) {
-    dispatch(
-      recipientRegister(name, street, number, complement, city, state, zip_code)
-    );
+  useEffect(() => {
+    async function loadRecipients() {
+      const response = await api.get(`recipients/${id}`);
+
+      const { data } = response;
+
+      setRecipients(data);
+    }
+    loadRecipients();
+  }, [id]);
+
+  async function handleEdit(data) {
+    await api.put(`/recipients/${id}`, {
+      name: data.name,
+      street: data.street,
+      number: data.number,
+      complement: data.complement,
+      city: data.city,
+      state: data.state,
+      zip_code: data.zip_code,
+    });
+    toast.success('Recipient edited');
+    history.push('/recipients');
   }
 
   return (
@@ -65,59 +77,75 @@ export default function RecipientsForm() {
                 <MdAdd size={25} color="#fff" />
               </div>
 
-              <span>Register</span>
+              <span>Save</span>
             </button>
           </div>
         </header>
       </Container>
       <Content>
-        <Form schema={schema} id="form" onSubmit={handleSubmit}>
-          <div>
-            <p>Name</p>
-            <Input name="name" type="name" placeholder="Ex: John Doe" />
-          </div>
-          <div id="street">
+        {recipients.map(recipient => (
+          <Form
+            schema={schema}
+            id="form"
+            key={recipient.id}
+            initialData={recipient}
+            onSubmit={handleEdit}
+          >
             <div>
-              <p>Street</p>
-              <Input
-                name="street"
-                type="string"
-                placeholder="Ex: Street Beethoven"
-              />
+              <p>Name</p>
+              <Input name="name" type="name" placeholder="Ex: John Doe" />
             </div>
-            <div>
-              <p className="number">Number</p>
-              <Input name="number" type="number" placeholder="Ex: 1729" />
+            <div id="street">
+              <div>
+                <p>Street</p>
+                <Input
+                  name="street"
+                  type="string"
+                  placeholder="Ex: Street Beethoven"
+                />
+              </div>
+              <div>
+                <p className="number">Number</p>
+                <Input name="number" type="number" placeholder="Ex: 1729" />
+              </div>
+              <div>
+                <p className="complement">Complement</p>
+                <Input
+                  name="complement"
+                  type="string"
+                  placeholder="Ex: Apt 301"
+                />
+              </div>
             </div>
-            <div>
-              <p className="complement">Complement</p>
-              <Input
-                name="complement"
-                type="string"
-                placeholder="Ex: Apt 301"
-              />
+            <div id="city">
+              <div>
+                <p>City</p>
+                <Input name="city" type="string" placeholder="Ex: Diadema" />
+              </div>
+              <div>
+                <p className="state">State</p>
+                <Input name="state" type="string" placeholder="Ex: São Paulo" />
+              </div>
+              <div>
+                <p className="zip_code">Zip code</p>
+                <Input
+                  name="zip_code"
+                  type="string"
+                  placeholder="Ex: 09960-580"
+                />
+              </div>
             </div>
-          </div>
-          <div id="city">
-            <div>
-              <p>City</p>
-              <Input name="city" type="string" placeholder="Ex: Diadema" />
-            </div>
-            <div>
-              <p className="state">State</p>
-              <Input name="state" type="string" placeholder="Ex: São Paulo" />
-            </div>
-            <div>
-              <p className="zip_code">Zip code</p>
-              <Input
-                name="zip_code"
-                type="string"
-                placeholder="Ex: 09960-580"
-              />
-            </div>
-          </div>
-        </Form>
+          </Form>
+        ))}
       </Content>
     </>
   );
 }
+
+RecipientsFormEdit.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }).isRequired,
+  }).isRequired,
+};
