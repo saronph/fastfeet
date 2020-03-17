@@ -120,6 +120,23 @@ class DeliverymanController {
     return res.json([deliveryman]);
   }
 
+  async list(req, res) {
+    const name = req.query.name || '';
+    const { page = 1 } = req.query;
+
+    const deliveryman = await Deliveryman.findAll({
+      order: ['name'],
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      offset: (page - 1) * 5,
+    });
+
+    return res.json(deliveryman);
+  }
+
   async delete(req, res) {
     const deliveryman = await Deliveryman.findByPk(req.params.id);
 

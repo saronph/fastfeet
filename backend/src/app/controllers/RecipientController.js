@@ -163,6 +163,23 @@ class RecipientController {
 
     return res.json([recipient]);
   }
+
+  async list(req, res) {
+    const name = req.query.name || '';
+    const { page = 1 } = req.query;
+
+    const recipients = await Recipient.findAll({
+      order: ['name'],
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      offset: (page - 1) * 5,
+    });
+
+    return res.json(recipients);
+  }
 }
 
 export default new RecipientController();
