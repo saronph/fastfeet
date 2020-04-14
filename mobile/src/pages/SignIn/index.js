@@ -1,17 +1,24 @@
 import React from 'react';
 import {Image} from 'react-native';
 
-import Logo from '~/assets/fastfeet-logo.png';
+import logo from '~/assets/logo.png';
+import Input from '~/components/Input';
 
-import {Container, Background, Input, Button} from './styles';
+import {Container, Background, SubmitButton} from './styles';
 
-export default function SignIn({children, ...rest}) {
+export default function SignIn() {
   return (
     <Background>
-      <Container {...rest}>
-        <Image source={Logo} size={45} />
-        <Input style={{marginTop: 30}} placeholder="Enter you ID" />
-        <Button />
+      <Container>
+        <Image source={logo} style={{marginBottom: 20}} />
+
+        <Input
+          style={{marginTop: 30}}
+          placeholder="Enter your ID"
+          autoCorrect={false}
+        />
+
+        <SubmitButton onPress={() => {}}>Enter the fastfeet</SubmitButton>
       </Container>
     </Background>
   );

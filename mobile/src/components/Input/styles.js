@@ -3,13 +3,13 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   padding: 0 15px;
   height: 46px;
-  background: rgba(0, 0, 0, 0.1);
+  background: #ffffff;
   flex-direction: row;
   align-items: center;
 `;
 
 export const TInput = styled.TextInput.attrs({
-  placeholderTextColor: '#DDDDDD',
+  placeholderTextColor: '#999999',
 })`
   flex: 1;
   font-size: 16px;
