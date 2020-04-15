@@ -1,8 +1,9 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Form, Input } from '@rocketseat/unform';
-import AsyncSelect from 'react-select/async';
 import * as Yup from 'yup';
 import { MdAdd, MdKeyboardArrowLeft } from 'react-icons/md';
+
+import AsyncSelect from '~/components/React-Select/index';
 
 import history from '~/services/history';
 import api from '~/services/api';
@@ -30,6 +31,8 @@ export default function DeliveryRegister() {
       value: recipient.id,
       label: recipient.name,
     }));
+
+    console.log(recipient);
 
     callback(data);
   }
