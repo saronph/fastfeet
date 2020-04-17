@@ -10,16 +10,11 @@ export function* signIn({payload}) {
   try {
     const {id} = payload;
 
-    const response = yield call(api.get, `deliveryman/${id}/deliveries`);
+    const response = yield call(api.get, `deliveryman/${id}`);
 
-    yield put(
-      signInSuccess(id, {
-        name: response.data.name,
-        email: response.data.email,
-        created_at: format(parseISO(response.data.created_at), 'dd/MM/yyyy'),
-        avatar: response.data.avatar,
-      }),
-    );
+    const deliveryman = response.data;
+
+    yield put(signInSuccess(deliveryman));
 
     // history.push('/dashboard');
   } catch (err) {
@@ -32,7 +27,4 @@ export function signOut() {
   // history.push('/');
 }
 
-export default all([
-  takeLatest('@auth/SIGN_IN_REQUEST', signIn),
-  takeLatest('@auth/SIGN_OUT', signOut),
-]);
+export default all([takeLatest('@auth/SIGN_IN_REQUEST', signIn)]);

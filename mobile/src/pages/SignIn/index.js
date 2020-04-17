@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Image} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -14,10 +14,10 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.auth.loading);
   const formRef = useRef(null);
+  const [id, setId] = useState('');
 
-  function handleSubmit({id}, {reset}) {
+  function handleSubmit() {
     dispatch(signInRequest(id));
-    reset();
   }
 
   return (
@@ -27,6 +27,9 @@ export default function SignIn() {
 
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
+            name="id"
+            value={id}
+            onChangeText={setId}
             style={{marginTop: 30}}
             placeholder="Enter your ID"
             autoCorrect={false}
